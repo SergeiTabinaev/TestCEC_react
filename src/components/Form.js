@@ -1,17 +1,22 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import {AlertContext} from '../context/alert/alertContext'
 import {DjserverContext} from '../context/djangoserver/djserverContext'
 
+
 export const Form = () => {
+
   const [value, setValue] = useState('')
   const alert = useContext(AlertContext)
-  const firebase = useContext(DjserverContext)
+  const djserver = useContext(DjserverContext)
+
+  const map = djserver.notes[0]
+  // const map = djserver.cats.map
 
   const submitHandler = event => {
     event.preventDefault()
 
     if (value.trim()) {
-      firebase.addNote(value.trim()).then(() => {
+      djserver.addNote(value.trim(), map.category).then(() => {
         alert.show('Заметка была создана', 'success')
       }).catch(() => {
         alert.show('Что-то пошло не так', 'danger')
