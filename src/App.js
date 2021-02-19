@@ -1,14 +1,19 @@
 import React from 'react';
-import {BrowserRouter, Route, Switch} from 'react-router-dom'
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {Login} from "./components/Login";
+import {Signup} from "./components/Signup";
 import {Home} from "./pages/Home";
-import {Navbar} from "./components/Navbar"
+import {Navbar} from "./components/Navbar";
 import {CategoryDetail} from "./pages/CategoryDetail";
 import {DjserverState} from "./context/djangoserver/djserverState";
-import {Alert} from './components/Alert'
+import {Alert} from './components/Alert';
 import {AlertState} from "./context/alert/AlertState";
+import {AuthState} from "./context/auth/authState";
+
 
 function App() {
   return (
+      <AuthState>
         <DjserverState>
           <AlertState>
             <BrowserRouter>
@@ -16,13 +21,16 @@ function App() {
               <div className="container pt-xl-5">
                 <Alert/>
                 <Switch>
-                  <Route path={'/'} exact component={Home}/>
-                  <Route path={'/category/:id'} exact component={CategoryDetail}/>
+                  <Route exact path={'/'} component={Home}/>
+                  <Route exact path={'/login'} component={Login} />
+                  <Route exact path={'/signup'} component={Signup} />
+                  <Route exact path={'/category/:id'} component={CategoryDetail}/>
                 </Switch>
               </div>
             </BrowserRouter>
           </AlertState>
         </DjserverState>
+      </AuthState>
   );
 }
 
