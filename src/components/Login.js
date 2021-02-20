@@ -1,22 +1,25 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react'
 import { Link, Redirect } from 'react-router-dom'
+import {AuthContext} from "../context/auth/authContext"
 
 
-const Login = ({ login, isAuthenticated }) => {
+export const Login = () => {
+
+    const {login, isAuthenticated} = useContext(AuthContext)
     const [formData, setFormData] = useState({
         username: '',
         password: ''
-    });
+    })
 
-    const { username, password } = formData;
+    const { username, password } = formData
 
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
 
     const onSubmit = e => {
-        e.preventDefault();
+        e.preventDefault()
 
-        login(username, password);
-    };
+        login(username, password)
+    }
 
     if (isAuthenticated) {
         return <Redirect to='/' />
@@ -59,11 +62,5 @@ const Login = ({ login, isAuthenticated }) => {
                 Forgot your Password? <Link to='/reset-password'>Reset Password</Link>
             </p>
         </div>
-    );
-};
-
-// const mapStateToProps = state => ({
-//     isAuthenticated: state.auth.isAuthenticated
-// });
-//
-// export default connect(mapStateToProps, { login })(Login);
+    )
+}

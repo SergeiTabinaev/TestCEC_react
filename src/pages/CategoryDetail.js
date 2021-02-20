@@ -1,5 +1,5 @@
-import React, {Fragment, useContext, useEffect} from "react";
-import {Sidebar} from "../components/Sidebar";
+import React, {Fragment, useContext, useEffect} from "react"
+import {Sidebar} from "../components/Sidebar"
 import {Form} from '../components/Form'
 import {Notes} from '../components/Notes'
 import {DjserverContext} from '../context/djangoserver/djserverContext'

@@ -1,27 +1,28 @@
-import React, { useState } from 'react'
+import React, {useContext, useState} from 'react'
 import { Link, Redirect } from 'react-router-dom'
+import {AuthContext} from "../context/auth/authContext"
 
 
-const Signup = ({ signup, isAuthenticated }) => {
+export const Signup = () => {
+
+    const {signup, isAuthenticated} = useContext(AuthContext)
     const [accountCreated, setAccountCreated] = useState(false);
     const [formData, setFormData] = useState({
+        email: '',
         username: '',
         password: '',
-        email: '',
-    });
+    })
 
-    const { username, email, password } = formData;
+    const { email, username, password } = formData
 
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
 
     const onSubmit = e => {
-        e.preventDefault();
+        e.preventDefault()
 
-        if (password === password) {   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            signup(username, email, password);
-            setAccountCreated(true);
-        }
-    };
+            signup(email, username, password)
+            setAccountCreated(true)
+    }
 
     if (isAuthenticated) {
         return <Redirect to='/' />
@@ -75,11 +76,5 @@ const Signup = ({ signup, isAuthenticated }) => {
                 Already have an account? <Link to='/login'>Sign In</Link>
             </p>
         </div>
-    );
-};
-
-// const mapStateToProps = state => ({
-//     isAuthenticated: state.auth.isAuthenticated
-// });
-//
-// export default connect(mapStateToProps, { signup })(Signup);
+    )
+}

@@ -36,7 +36,7 @@ export const AuthState = ({children}) => {
             }
 
             try {
-                const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/users/me/`, config)
+                const res = await axios.get(`http://127.0.0.1:8000/auth/users/me/`, config)
 
                 dispatch({
                     type: USER_LOADED_SUCCESS,
@@ -50,9 +50,9 @@ export const AuthState = ({children}) => {
         } else {
             dispatch({
                 type: USER_LOADED_FAIL
-            });
+            })
         }
-    };
+    }
 
     const checkAuthenticated = async () => {
         if (localStorage.getItem('access')) {
@@ -66,7 +66,7 @@ export const AuthState = ({children}) => {
             const body = JSON.stringify({ token: localStorage.getItem('access') })
 
             try {
-                const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/jwt/verify/`, body, config)
+                const res = await axios.post(`http://127.0.0.1:8000/auth/jwt/verify/`, body, config)
 
                 if (res.data.code !== 'token_not_valid') {
                     dispatch({
@@ -100,38 +100,43 @@ export const AuthState = ({children}) => {
         const body = JSON.stringify({ username, password });
 
         try {
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/jwt/create/`, body, config);
-
+            const res = await axios.post(`http://127.0.0.1:8000/auth/jwt/create/`, body, config);
+            localStorage.setItem('access', res.data.access)
+            localStorage.setItem('refresh', res.data.refresh)
             dispatch({
                 type: LOGIN_SUCCESS,
                 payload: res.data
             })
-
             dispatch(load_user())
+
         } catch (err) {
+            localStorage.removeItem('access')
+            localStorage.removeItem('refresh')
             dispatch({
                 type: LOGIN_FAIL
             })
         }
     }
 
-    const signup = async (username, password) => {
+    const signup = async (email, username, password) => {
         const config = {
             headers: {
                 'Content-Type': 'application/json'
             }
         }
 
-        const body = JSON.stringify({ username, password })
+        const body = JSON.stringify({ email, username, password })
 
         try {
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/users/`, body, config)
+            const res = await axios.post(`http://127.0.0.1:8000/auth/users/`, body, config)
 
             dispatch({
                 type: SIGNUP_SUCCESS,
                 payload: res.data
             })
         } catch (err) {
+            localStorage.removeItem('access')
+            localStorage.removeItem('refresh')
             dispatch({
                 type: SIGNUP_FAIL
             })

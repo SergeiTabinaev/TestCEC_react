@@ -12,9 +12,9 @@ import {
 
 const handlers = {
         [AUTHENTICATED_SUCCESS]: state => ({...state, isAuthenticated: true}),
-        [LOGIN_SUCCESS]: state => ({...state}),
-        [SIGNUP_SUCCESS]: (state) => ({...state, isAuthenticated: true}),  //или false нужен payload? {payload}
-        [USER_LOADED_SUCCESS]: (state, {payload}) => ({...state, user: payload}),
+        [LOGIN_SUCCESS]: (state, {payload}) => ({...state, access: payload.access, isAuthenticated: true}),
+        [SIGNUP_SUCCESS]: (state) => ({...state, isAuthenticated: false}),
+        [USER_LOADED_SUCCESS]: (state, {payload}) => ({...state, user: payload, isAuthenticated: true}),
         [AUTHENTICATED_FAIL]: state => ({...state, isAuthenticated: false}),
         [USER_LOADED_FAIL]: state => ({...state, user: null}),
         [LOGIN_FAIL]: state => ({...state}),

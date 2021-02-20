@@ -1,18 +1,10 @@
-import React, {useContext, useEffect} from "react";
-import {Sidebar} from "../components/Sidebar";
-import {DjserverContext} from "../context/djangoserver/djserverContext";
-import {Link} from "react-router-dom";
-
+import React, {useContext} from "react"
+import {Sidebar} from "../components/Sidebar"
+import {DjserverContext} from "../context/djangoserver/djserverContext"
+import {Link} from "react-router-dom"
 
 export const Home = () => {
-
     const {fetchCats, cats} = useContext(DjserverContext)
-
-
-    useEffect(() => {
-        fetchCats()
-        // eslint-disable-next-line
-    }, [])
 
     return(
         <div className="container">
