@@ -1,3 +1,20 @@
+# TestCEC_django
+
+Тестовое Задание. frontend часть (backend часть на https://github.com/SergeiTabinaev/TestCEC_django/tree/main) 
+
+Todo лист с выбором категорий и авторизацией и регистрацией(jwt токены).
+
+Использованы следующие технологии: React на хуках
+
+Не доделано:
+
+1) Баг при логинизации(входе) (передать isAuthenticated)
+2) Баг при создании первой таски в категориях 
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
