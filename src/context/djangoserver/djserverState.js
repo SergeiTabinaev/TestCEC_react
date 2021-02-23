@@ -14,7 +14,6 @@ export const DjserverState = ({children}) => {
     cats: [],
     notes: [],
     loading: false,
-    // isAuthenticated: isAuthenticated
   }
   const [state, dispatch] = useReducer(djserverReducer, initialState)
 
@@ -23,14 +22,24 @@ export const DjserverState = ({children}) => {
   const fetchCats = async () => {
     if (isAuthenticated) {
       showLoader()
-      const res = await axios.get(`http://127.0.0.1:8000/api/category/`)
-
-      const payload = Object.keys(res.data).map(key => {
-        return {
-          ...res.data[key],
+      if (localStorage.getItem('access'))
+      {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `JWT ${localStorage.getItem('access')}`,
+            'Accept': 'application/json'
+          }
         }
-      })
-      dispatch({type: FETCH_CATS, payload})
+        const res = await axios.get(`http://127.0.0.1:8000/api/category/`, config)
+
+        const payload = Object.keys(res.data).map(key => {
+          return {
+            ...res.data[key],
+          }
+        })
+        dispatch({type: FETCH_CATS, payload})
+      }
     }
     else
       return <Redirect to='/login' />
@@ -39,14 +48,23 @@ export const DjserverState = ({children}) => {
   const fetchNotes = async (id) => {
     if (isAuthenticated) {
       showLoader()
-      const res = await axios.get(`http://127.0.0.1:8000/api/category/${id}`)
-
-      const payload = Object.keys(res.data.tasks).map(key => {
-        return {
-          ...res.data.tasks[key],
+      if (localStorage.getItem('access')) {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `JWT ${localStorage.getItem('access')}`,
+            'Accept': 'application/json'
+          }
         }
-      })
-      dispatch({type: FETCH_NOTES, payload})
+        const res = await axios.get(`http://127.0.0.1:8000/api/category/${id}`, config)
+
+        const payload = Object.keys(res.data.tasks).map(key => {
+          return {
+            ...res.data.tasks[key],
+          }
+        })
+        dispatch({type: FETCH_NOTES, payload})
+      }
     }
     else
       return <Redirect to='/login' />
@@ -55,23 +73,32 @@ export const DjserverState = ({children}) => {
 
   const addNote = async (title, id) => {
     if (isAuthenticated) {
-      const resp = await axios.get(`http://127.0.0.1:8000/api/category/${id}`)
-      const cat = resp.data.id
-      const note = {
-        title,
-        category: cat
-      }
-
-      try {
-        await axios.post(`http://127.0.0.1:8000/api/task/`, note)
-        const payload = {
-          ...note,
+      if (localStorage.getItem('access')) {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `JWT ${localStorage.getItem('access')}`,
+            'Accept': 'application/json'
+          }
+        }
+        const resp = await axios.get(`http://127.0.0.1:8000/api/category/${id}`, config)
+        const cat = resp.data.id
+        const note = {
+          title,
+          category: cat
         }
 
-        dispatch({type: ADD_NOTE, payload})
+        try {
+          await axios.post(`http://127.0.0.1:8000/api/task/`, note, config)
+          const payload = {
+            ...note,
+          }
 
-      } catch (e) {
-        throw new Error(e.message)
+          dispatch({type: ADD_NOTE, payload})
+
+        } catch (e) {
+          throw new Error(e.message)
+        }
       }
     }
     else
@@ -80,12 +107,21 @@ export const DjserverState = ({children}) => {
 
   const removeNote = async id => {
     if (isAuthenticated) {
-      await axios.delete(`http://127.0.0.1:8000/api/task/${id}`)
+      if (localStorage.getItem('access')) {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `JWT ${localStorage.getItem('access')}`,
+            'Accept': 'application/json'
+          }
+        }
+        await axios.delete(`http://127.0.0.1:8000/api/task/${id}`, config)
 
-      dispatch({
-        type: REMOVE_NOTE,
-        payload: id
-      })
+        dispatch({
+          type: REMOVE_NOTE,
+          payload: id
+        })
+      }
     }
     else
       return <Redirect to='/login' />

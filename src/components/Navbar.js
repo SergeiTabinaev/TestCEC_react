@@ -1,12 +1,17 @@
-import React, {Fragment, useContext, useState} from 'react'
+import React, {Fragment, useContext, useEffect, useState} from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import {AuthContext} from "../context/auth/authContext"
 
 
 export const Navbar = () => {
 
-    const {logout, isAuthenticated} = useContext(AuthContext)
+    const {logout, isAuthenticated, checkAuthenticated} = useContext(AuthContext)
     const [redirect, setRedirect] = useState(false)
+
+    useEffect(() => {
+        checkAuthenticated()
+        // eslint-disable-next-line
+    }, [])
 
     const logout_user = () => {
         logout();
